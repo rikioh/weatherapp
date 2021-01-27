@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>                  
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script> 
+    </head>
+
+    <body>
+		<input class="city" type="text"></input> 
+		<button class="submit">Submit</button>
+        <div>Weather in : <span class="city-name"></span></div> <!-- Will show the location, we use a span to have a dynamic blank space. -->
+        <div class="weather"></div>	<!-- Will show the weather -->
+        <div class="temp"></div>	<!-- Will show the temperature -->
+        <div class="country"></div> <!-- Will show the country -->
+
+        <script>
+	        $(".submit").click(function(){
+		        	var city = $(".city").val()
+		        	//Make the API Call
+		        	$.getJSON("http://api.openweathermap.org/data/2.5/weather",
+				{
+					zip:11355,
+					units:"imperial"
+				},
+				function(response){  //'response' is actually a variable, we could name it what ever we want. It just stores what the api sends
+					console.log(response)
+					$(".country").html(response.sys.country)
+					$(".temp").html(response.main.temp);
+					$(".city-name").html(response.name);
+					  $(".weather").html(response.weather[0].description)
+				});
+	        })
+	        
+        </script> 
+    </body>
+</html>

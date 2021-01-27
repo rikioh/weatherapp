@@ -1,11 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather App</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Server-Side APIs</title>
+  <!-- bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+  <!-- JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- Luxon -->
+  <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
+  <script>dayjs().format()</script>
 </head>
-<body>
-    
+
+<body class="min-100-vh flex-column bg-light">
+  <header class="p-5 text-center text-white bg-primary">
+    <h1>Server-Side APIs</h1>
+  </header>
+  <main class="flex-row justify-center align-center col-auto p-4">
+    <div class="col-7">
+      <section class="card card-rounded bg-white">
+        <header class="card-header text-center">
+          <h2 class="text-white">
+            Create a fetch request
+          </h2>
+        </header>
+        <div class="card-body flex-row justify-center p-4 text-center">
+          <p class="col-10 mb-3">
+            In the script.js file, create the correct URL for the fetch request
+            to list YOUR repositories.
+          </p>
+          <div class="col-8 mb-3">
+            <button class="btn btn-primary" id="fetch-button">
+              Fetch Your User Repos
+            </button>
+          </div>
+          <ul class="col-8 mb-3"></ul>
+        </div>
+        <footer class="card-footer text-center">
+          ^ You should see a list of your repositories ^
+        </footer>
+      </section>
+    </div>
+  </main>
+  <script src="./script.js"></script>
 </body>
+
 </html>
