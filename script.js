@@ -101,6 +101,8 @@ function getWeatherData(cityName){
         getFiveDayForecastNames()
 
         console.log(fivedayForecast)
+        // split each day up individually into objects
+        fiveDaySplitUp()
 
     }
     // like an else statment for a .then statement console log the error
@@ -134,6 +136,18 @@ function getFiveDayForecastNames(){
         else{
             fivedayForecast.dayName.push(additionalDays)
         }
+    }
+}
+
+// function to split 5day forecast object into 5 unique objects
+function fiveDaySplitUp(){
+    for (i=0;i<5;i++){
+        var oneDayPlus = []
+        oneDayPlus.push(fivedayForecast.dayName[i])
+        oneDayPlus.push(fivedayForecast.humidity[i])
+        oneDayPlus.push(fivedayForecast.temperature[i])
+        oneDayPlus.push(fivedayForecast.weatherIcon[i])
+        console.log(oneDayPlus)
     }
 }
 
