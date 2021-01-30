@@ -5,7 +5,7 @@ var apiKey = "69fd6d7b254c17b464312f7e4a53ed52"
 
 // list of days of the week
 var weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-// full object for the next 5 days
+// full object for the next 5 days broken up by item
 var fivedayForecast = {
     dayName: [],
     weatherIcon: [],
@@ -18,6 +18,12 @@ var twoDayPlus = []
 var threeDayPlus = []
 var fourDayPlus = []
 var fiveDayPlus = []
+
+// full five day forecast object
+var fullfinalFiveDayArray = [oneDayPlus,twoDayPlus,threeDayPlus,fourDayPlus,fiveDayPlus]
+
+// checks if a search has been done yet
+var firstSearch = false
 
 // passes the cityName into the ajax fetchurl from the on submit search event (what is typed into the search bar and pressed enter on). also passes
 // api key into end of url. ` keys allow the url to use jquery instead of + +
@@ -108,7 +114,8 @@ function getWeatherData(cityName){
         console.log(fivedayForecast)
         // split each day up individually into objects
         fiveDaySplitUp()
-
+        // create dynamic html for 5 day forecast
+        createFiveDayHtmlItems()
     }
     // like an else statment for a .then statement console log the error
     ).catch(function(error){
@@ -185,16 +192,90 @@ function fiveDaySplitUp(){
     }
 }
 
+function createFiveDayHtmlItems(){
+    for (i=0;i<5;i++){
+        // row div for each future date
+        var dayRow = $("<div>")
+        // four divs for columns
+        var dateCol = $("<div>")
+        var tempCol = $("<div>")
+        var iconCol = $("<div>")
+        var humidCol = $("<div>")
+        // four variables for column items
+        var dateShown = $("<h2>")
+        var temp1Shown = $("<h2>")
+        var temp2Shown = $("<h5>")
+        var iconShown = $("<div>")
+        var humidShown = $("<h2>")
+        // add classes and attributes to col's/row
+        dayRow.addClass("row dash-row")
+        dayRow.attr("id", "dayRows")
+        dateCol.addClass("col-3")
+        dateCol.attr("id", "dateCol")
+        tempCol.addClass("col-3")
+        tempCol.attr("id", "tempCol")
+        iconCol.addClass("col-3")
+        iconCol.attr("id", "iconCol")
+        humidCol.addClass("col-3")
+        humidCol.attr("id", "humidCol")
+        dateShown.addClass("drop")
+        dateShown.attr("id", "dateShown")
+        temp1Shown.attr("id", "temp1Shown")
+        temp1Shown.addClass("drop2")
+        temp2Shown.attr("id", "temp2Shown")
+        temp2Shown.addClass("drop2")
+        iconShown.attr("id", "iconShown")
+        humidShown.addClass("drop")
+        humidShown.attr("id", "humidShown")
+        // append row to html card and columns to dayRow
+        $("#notTodayWeather").append(dayRow)
+        $("#dayRows").append(dateCol)
+        $("#dayRows").append(tempCol)
+        $("#dayRows").append(iconCol)
+        $("#dayRows").append(humidCol)
+        // add date to row/column
+        $("#dateCol").append(dateShown)
+        $("#dateShown").text(fullfinalFiveDayArray[i][0])
+        // add temp to row/column
+        $("#tempCol").append(temp1Shown)
+        $("#temp1Shown").text(`High: ${fullfinalFiveDayArray[i][2].max_temp}°/`)
+        $("#tempCol").append(temp2Shown)
+        $("#temp2Shown").text(`Low: ${fullfinalFiveDayArray[i][2].min_temp}°`)
+        // add icon to row/column
+        $("#iconCol").append(iconShown)
+        $("#iconShown").append(`<img id="theImg" src=${fullfinalFiveDayArray[i][3]} />`)
+        // add humiditiy to row/column
+        $("#humidCol").append(humidShown)
+        $("#humidShown").text(fullfinalFiveDayArray[i][1])
+        // remove ids from columns so they dont append 5 times
+        $("#dayRows").removeAttr("id")
+        $("#dateCol").removeAttr("id")
+        $("#tempCol").removeAttr("id")
+        $("#iconCol").removeAttr("id")
+        $("#humidCol").removeAttr("id")
+        $("#dateShown").removeAttr("id")
+        $("#temp1Shown").removeAttr("id")
+        $("#temp2Shown").removeAttr("id")
+        $("#iconShown").removeAttr("id")
+        $("#humidShown").removeAttr("id")
+    }
+}
+
 // search action for when a user presses enter on the city search form
 $(document).on('submit',function(event){
     event.preventDefault();
     // pulls value from city search form
     var cityName = $("#citySearchBar").val()
     console.log(cityName)
-    // runs the get request function to grab the weather object
-    getWeatherData(cityName)
     // adds search item to local storage for future quick search on sidebar
     localStorage.setItem("currentcitysearch",JSON.stringify(cityName));
-
+    if(firstSearch==false){
+    // runs the get request function to grab the weather object
+    getWeatherData(cityName)
+    firstSearch = true
+    }
+    else{
+        return
+    }
  });
 

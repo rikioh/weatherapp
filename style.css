@@ -1,7 +1,47 @@
+header{
+    background-image: url("./Assets/headbackground.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.dark-mode{
+    background-color:	#141d26;
+}
+
 .form-label {
     font-size: calc(1.6rem + .3vw);
     margin-top: 0;
     margin-bottom: .5rem;
     font-weight: 500;
     line-height: 1.2
+}
+
+.dash-row{
+    border-top: 3px dashed #141d26
+}
+
+.white-text{
+    color: antiquewhite
+}
+
+.white-bg{
+    background-color: antiquewhite
+}
+
+.drop{
+    margin: 0;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.drop2{
+    margin: 0;
+    position: relative;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -25%);
 }
