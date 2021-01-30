@@ -267,15 +267,9 @@ $(document).on('submit',function(event){
     // pulls value from city search form
     var cityName = $("#citySearchBar").val()
     console.log(cityName)
+    // getWeatherData(cityName)
     // adds search item to local storage for future quick search on sidebar
     localStorage.setItem("currentcitysearch",JSON.stringify(cityName));
-    if(firstSearch==false){
-    // runs the get request function to grab the weather object
-    getWeatherData(cityName)
-    firstSearch = true
-    }
-    else{
-        return
-    }
+    window.location.href = "./searchlanding.html";
  });
 
