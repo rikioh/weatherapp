@@ -5,6 +5,9 @@ var apiKey = "69fd6d7b254c17b464312f7e4a53ed52"
 
 // list of days of the week
 var weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+
+// stores current tempterature
+var currentTemp = ""
 // full object for the next 5 days broken up by item
 var fivedayForecast = {
     dayName: [],
@@ -28,9 +31,6 @@ var firstSearch = false
 // passes the cityName into the ajax fetchurl from the on submit search event (what is typed into the search bar and pressed enter on). also passes
 // api key into end of url. ` keys allow the url to use jquery instead of + +
 function getRequestURL(cityName){
-    // current forecast
-    // return `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&apikey=${apiKey}`
-
     // five day forecast
     return `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${apiKey}`
 }
@@ -121,6 +121,29 @@ function getWeatherData(cityName){
     ).catch(function(error){
         // error logs the actual error variable it is not created by me
         console.log(error.responseText)
+    }
+    )
+}
+
+// get current weather data
+function getRequestURLCurrent(cityName){
+    // current forecast
+    return `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&apikey=${apiKey}`
+}
+
+// ajax get request called on by the search bar submit event. Pulls the data based off of the city name plugged into the search bar.
+function getCurrentWeatherData(cityName){
+    $.ajax({
+        url: getRequestURLCurrent(cityName),
+        method: "GET"
+        // data below is the object that holds the current forecast object - (data is the response[needed]) - then is like an if statement
+    }).then(function(data){
+        console.log(data)
+        var currentTempC = data.main.temp
+        currentTemp = (currentTempC * 9/5 + 32).toFixed(1)
+
+        createCurrentWeatherItems()
+
     }
     )
 }
@@ -261,6 +284,52 @@ function createFiveDayHtmlItems(){
     }
 }
 
+function createCurrentWeatherItems(){
+        // row div for each current date
+        var firstRow = $("<div>")
+        // five divs for columns
+        var temp1 = $("<div>")
+        var humid1 = $("<div>")
+        var wind1 = $("<div>")
+        var uv1 = $("<div>")
+        // five variables for column items
+        var tempShow = $("<h2>")
+        var humidShow = $("<h2>")
+        var windShow = $("<h2>")
+        var uvShow = $("<div>")
+        // add classes and attributes to col's/row
+        firstRow.addClass("row dash-row")
+        firstRow.attr("id", "firstRows")
+        temp1.addClass("col-md-3")
+        temp1.attr("id", "temp1")
+        humid1.addClass("col-md-3")
+        humid1.attr("id", "humid1")
+        wind1.addClass("col-md-3")
+        wind1.attr("id", "wind1")
+        uv1.addClass("col-md-3")
+        uv1.attr("id", "uv1")
+        tempShow.attr("id", "tempShow")
+        tempShow.addClass("drop2")
+        humidShow.addClass("drop")
+        humidShow.attr("id", "humidShow")
+        windShow.addClass("drop")
+        windShow.attr("id", "windShow")
+        uvShow.addClass("drop")
+        uvShow.attr("id", "uvShow")
+        // append row to html card and columns to firstRow
+        $("#notTodayWeather").prepend(firstRow)
+        $("#firstRows").append(temp1)
+        $("#firstRows").append(humid1)
+        $("#firstRows").append(wind1)
+        $("#firstRows").append(uv1)
+        $("#temp1").append(tempShow)
+        $("#tempShow").text("Current Temp: "+currentTemp+"°")
+        $("#humid1").append(humidShow)
+        $("#wind1").append(windShow)
+        $("#uv1").append(uvShow)
+
+}
+
 // search action for when a user presses enter on the city search form
 $(document).on('submit',function(event){
     event.preventDefault();
@@ -270,6 +339,7 @@ $(document).on('submit',function(event){
     // getWeatherData(cityName)
     // adds search item to local storage for future quick search on sidebar
     localStorage.setItem("currentcitysearch",JSON.stringify(cityName));
+    // change this to actual URL later???
     window.location.href = "./searchlanding.html";
  });
 
