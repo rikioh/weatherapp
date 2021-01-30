@@ -5,8 +5,13 @@ var apiKey = "69fd6d7b254c17b464312f7e4a53ed52"
 
 // list of days of the week
 var weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-var today = dayjs().$d
-console.log(today)
+// full object for the next 5 days
+var fivedayForecast = {
+    dayName: [],
+    weatherIcon: [],
+    temperature: [],
+    humidity: []
+}
 
 // passes the cityName into the ajax fetchurl from the on submit search event (what is typed into the search bar and pressed enter on). also passes
 // api key into end of url. ` keys allow the url to use jquery instead of + +
@@ -26,12 +31,6 @@ function getWeatherData(cityName){
         // data below is the object that holds the current forecast object - (data is the response[needed]) - then is like an if statement
     }).then(function(data){
         console.log(data)
-        // full object for the next 5 days
-        var fivedayForecast = {}
-        // array to hold next 5 days date (month/day)
-        var nextFivedays = []
-        // array to hold next 5 day temperature forecast
-        var daytempObjects = []
         // 3 variables for average temp, max temp, and min temp for a day
         var dailyTemp = 0
         var maxdailyTemp = []
@@ -40,6 +39,7 @@ function getWeatherData(cityName){
         // 1) finds a reading's weather. there are 8 temperature readings every 3 hours for 5 days (40 readings). this is why i= a max of 39
         // 2) finds a reading's date
         // 3) finds a reading's icon
+        // 4) finds a reading's humidity
         for (i=0;i<40;i++){
             // variables that pull temp, maxtemp, and mintemp for each 3 hour reading
             var kelvinTemp = data.list[i].main.temp
@@ -72,24 +72,35 @@ function getWeatherData(cityName){
                     min_temp: trueminTempF
                 }
                 // push combined full day object into 5 day array
-                daytempObjects.push(combinedtempObject)
+                fivedayForecast.temperature.push(combinedtempObject)
                 //  we have reached the end of the day's readings, reset variables for the next day
                 dailyTemp = 0
                 maxdailyTemp = []
                 mindailyTemp = []
             }
+            // finds middle of the day reading
             else if (daydate.slice(-8)=="12:00:00"){
-                // find month/day item
-                monthDay = daydate.slice(5,10)
-                nextFivedays.push(monthDay)
-
+                // code for humidity
+                    // pulls humidity reading
+                    var humidityReading = data.list[i].main.humidity
+                    var humidityPercent = humidityReading+"%"
+                    fivedayForecast.humidity.push(humidityPercent)
+                // code for weather icon
+                    // item icon ID
+                    var weatherIconID = data.list[i].weather[0].icon
+                    // item icon link
+                    var weatherIcon = `http://openweathermap.org/img/wn/${weatherIconID}@2x.png`
+                    // add individual day icon link to the 5 day object
+                    fivedayForecast.weatherIcon.push(weatherIcon)
             }
             else {
                 continue;
             }
         }
-        console.log(daytempObjects)
-        console.log(nextFivedays)
+
+        getFiveDayForecastNames()
+
+        console.log(fivedayForecast)
 
     }
     // like an else statment for a .then statement console log the error
@@ -100,9 +111,36 @@ function getWeatherData(cityName){
     )
 }
 
+// get the proper names for the next five days of the week with Day.JS
+function getFiveDayForecastNames(){
+    // pull full date of current day as a string
+    var today = dayjs().$d.toString()
+    // slice the first 3 characters off the full date string to get weekday
+    var todaySlice = today.slice(0,3)
+    // find the position of the sliced weekday in the weekDays array
+    currentDayPosition = weekDays.indexOf(todaySlice)
+    // finds the current amount of days left in the week
+    daysLeftInWeek = weekDays.length-currentDayPosition
+    // grabs the next five days and resets to array[0] if it hits the end of the array
+    for (i=currentDayPosition;i<weekDays.length;i++){
+        var additionalDays = weekDays[i+1]
+        if (additionalDays===undefined){
+            var resetDays = 5-daysLeftInWeek
+            for (x=0;x<=resetDays;x++){
+                additionalDays=weekDays[x]
+                fivedayForecast.dayName.push(additionalDays)
+            }
+        }
+        else{
+            fivedayForecast.dayName.push(additionalDays)
+        }
+    }
+}
+
+// search action for when a user presses enter on the city search form
 $(document).on('submit',function(event){
     event.preventDefault();
-    // create object to be pushed into hiscores array
+    // pulls value from city search form
     var cityName = $("#citySearchBar").val()
     console.log(cityName)
     // runs the get request function to grab the weather object
