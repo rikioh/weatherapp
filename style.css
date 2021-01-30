@@ -6,6 +6,9 @@ header{
     position: relative;
 }
 
+h2{
+    text-transform:capitalize;
+}
 .dark-mode{
     background-color:	#141d26;
 }

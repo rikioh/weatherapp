@@ -3,3 +3,5 @@ var cityName = JSON.parse(localStorage.getItem("currentcitysearch"))
 
 getWeatherData(cityName)
 firstSearch = true
+
+$("#city-Name").text(cityName)
