@@ -12,6 +12,12 @@ var fivedayForecast = {
     temperature: [],
     humidity: []
 }
+// variables for individual days
+var oneDayPlus = []
+var twoDayPlus = []
+var threeDayPlus = []
+var fourDayPlus = []
+var fiveDayPlus = []
 
 // passes the cityName into the ajax fetchurl from the on submit search event (what is typed into the search bar and pressed enter on). also passes
 // api key into end of url. ` keys allow the url to use jquery instead of + +
@@ -57,7 +63,6 @@ function getWeatherData(cityName){
             if (daydate.slice(-8)=="21:00:00"){
                 // variable for the average daily temperature in Kelvin
                 var averagedailyTemp = (dailyTemp/mindailyTemp.length)
-                console.log(mindailyTemp.length)
                 // variable for true max/min of max/min arrays respeectively
                 var truemaxTempK = Math.max.apply(Math, maxdailyTemp)
                 var trueminTempK = Math.min.apply(Math, mindailyTemp)
@@ -142,12 +147,41 @@ function getFiveDayForecastNames(){
 // function to split 5day forecast object into 5 unique objects
 function fiveDaySplitUp(){
     for (i=0;i<5;i++){
-        var oneDayPlus = []
-        oneDayPlus.push(fivedayForecast.dayName[i])
-        oneDayPlus.push(fivedayForecast.humidity[i])
-        oneDayPlus.push(fivedayForecast.temperature[i])
-        oneDayPlus.push(fivedayForecast.weatherIcon[i])
-        console.log(oneDayPlus)
+        if(i==0){
+            oneDayPlus.push(fivedayForecast.dayName[i])
+            oneDayPlus.push(fivedayForecast.humidity[i])
+            oneDayPlus.push(fivedayForecast.temperature[i])
+            oneDayPlus.push(fivedayForecast.weatherIcon[i])
+            console.log(oneDayPlus)
+        }
+        else if(i==1){
+            twoDayPlus.push(fivedayForecast.dayName[i])
+            twoDayPlus.push(fivedayForecast.humidity[i])
+            twoDayPlus.push(fivedayForecast.temperature[i])
+            twoDayPlus.push(fivedayForecast.weatherIcon[i])
+            console.log(twoDayPlus)
+        }
+        else if(i==2){
+            threeDayPlus.push(fivedayForecast.dayName[i])
+            threeDayPlus.push(fivedayForecast.humidity[i])
+            threeDayPlus.push(fivedayForecast.temperature[i])
+            threeDayPlus.push(fivedayForecast.weatherIcon[i])
+            console.log(threeDayPlus)
+            }
+        else if(i==3){
+            fourDayPlus.push(fivedayForecast.dayName[i])
+            fourDayPlus.push(fivedayForecast.humidity[i])
+            fourDayPlus.push(fivedayForecast.temperature[i])
+            fourDayPlus.push(fivedayForecast.weatherIcon[i])
+            console.log(fourDayPlus)
+            }
+        else {
+            fiveDayPlus.push(fivedayForecast.dayName[i])
+            fiveDayPlus.push(fivedayForecast.humidity[i])
+            fiveDayPlus.push(fivedayForecast.temperature[i])
+            fiveDayPlus.push(fivedayForecast.weatherIcon[i])
+            console.log(fiveDayPlus)
+            }        
     }
 }
 

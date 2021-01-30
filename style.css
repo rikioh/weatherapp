@@ -1,0 +1,7 @@
+.form-label {
+    font-size: calc(1.6rem + .3vw);
+    margin-top: 0;
+    margin-bottom: .5rem;
+    font-weight: 500;
+    line-height: 1.2
+}
