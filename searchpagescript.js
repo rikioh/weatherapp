@@ -1,0 +1,2 @@
+getWeatherData(cityName)
+firstSearch = true
