@@ -48,3 +48,10 @@ h2{
     left: 50%;
     transform: translate(-50%, -25%);
 }
+
+.btn-primary{
+    background-image: url("./Assets/headbackground.jpg");
+    color:antiquewhite;
+    border-color: antiquewhite;
+    font-weight: 500;
+}

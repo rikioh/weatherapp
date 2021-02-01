@@ -7,7 +7,13 @@ var apiKey = "69fd6d7b254c17b464312f7e4a53ed52"
 var weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 
 // stores current tempterature
-var currentTemp = ""
+var currentWeather = []
+
+var lat = ""
+var lon = ""
+
+var UVI = []
+
 // full object for the next 5 days broken up by item
 var fivedayForecast = {
     dayName: [],
@@ -24,9 +30,6 @@ var fiveDayPlus = []
 
 // full five day forecast object
 var fullfinalFiveDayArray = [oneDayPlus,twoDayPlus,threeDayPlus,fourDayPlus,fiveDayPlus]
-
-// checks if a search has been done yet
-var firstSearch = false
 
 // passes the cityName into the ajax fetchurl from the on submit search event (what is typed into the search bar and pressed enter on). also passes
 // api key into end of url. ` keys allow the url to use jquery instead of + +
@@ -139,10 +142,43 @@ function getCurrentWeatherData(cityName){
         // data below is the object that holds the current forecast object - (data is the response[needed]) - then is like an if statement
     }).then(function(data){
         console.log(data)
+        // grab temp and push it to main current weather object
         var currentTempC = data.main.temp
         currentTemp = (currentTempC * 9/5 + 32).toFixed(1)
+        currentWeather.push(currentTemp)
+
+        // grab humidity and push it to main
+        var currentHumidity = (data.main.humidity)+"%"
+        currentWeather.push(currentHumidity)
+
+        // grab wind speed and push
+        var currentWind = (data.wind.speed)+" MPH"
+        currentWeather.push(currentWind)
+
+        // grab lat and lon
+        lat = data.coord.lat
+        lon = data.coord.lon
+        // grab UV data by running the one call API (passed lat,lon into function to plug into getRequestURLUV function return url)
+        getCurrentUVData(lat, lon)
 
         createCurrentWeatherItems()
+    }
+    )
+}
+// get current weather data
+function getRequestURLUV(){
+    // current forecast
+    return `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,daily&appid=${apiKey}`
+}
+
+function getCurrentUVData(cityName){
+    $.ajax({
+        url: getRequestURLUV(cityName),
+        method: "GET"
+        // data below is the object that holds the current forecast object - (data is the response[needed]) - then is like an if statement
+    }).then(function(data){
+        var currentUVI = Math.round(data.current.uvi)
+        currentWeather.push(currentUVI)
 
     }
     )
@@ -296,7 +332,7 @@ function createCurrentWeatherItems(){
         var tempShow = $("<h2>")
         var humidShow = $("<h2>")
         var windShow = $("<h2>")
-        var uvShow = $("<div>")
+        var uvShow = $("<h2>")
         // add classes and attributes to col's/row
         firstRow.addClass("row dash-row")
         firstRow.attr("id", "firstRows")
@@ -323,23 +359,57 @@ function createCurrentWeatherItems(){
         $("#firstRows").append(wind1)
         $("#firstRows").append(uv1)
         $("#temp1").append(tempShow)
-        $("#tempShow").text("Current Temp: "+currentTemp+"°")
+        $("#tempShow").text("Current Temp: "+currentWeather[0]+"°")
         $("#humid1").append(humidShow)
+        $("#humidShow").text("Humidity: "+currentWeather[1]+"%")
         $("#wind1").append(windShow)
+        $("#windShow").text("Wind: "+currentWeather[2])
         $("#uv1").append(uvShow)
+        $("#uvShow").text("UV Index: "+currentWeather[3]+"/10")
+        console.log(currentWeather)
 
+}
+
+function previousSearches(){
+    for (i=0;i<cityHistory.length;i++){
+        var lastSearchDiv = $("<div>")
+        var lastSearch = $("<button>")
+        lastSearchDiv.attr("id", "lastSearchDiv")
+        lastSearch.addClass("btn btn-primary lastSearch col-md-12")
+        lastSearch.attr("id", "lastSearch")
+        lastSearch.attr("value", cityHistory[i])
+        $("#searches").append(lastSearchDiv)
+        $("#lastSearchDiv").append(lastSearch)
+        $("#lastSearch").text(cityHistory[i])
+        $("#lastSearch").removeAttr("id")
+    }
 }
 
 // search action for when a user presses enter on the city search form
 $(document).on('submit',function(event){
     event.preventDefault();
     // pulls value from city search form
-    var cityName = $("#citySearchBar").val()
+    var preCityName = $("#citySearchBar").val()
+    var cityName = titleCase(preCityName)
     console.log(cityName)
     // getWeatherData(cityName)
     // adds search item to local storage for future quick search on sidebar
-    localStorage.setItem("currentcitysearch",JSON.stringify(cityName));
+    localStorage.setItem("currentcitysearch",JSON.stringify(cityName))
     // change this to actual URL later???
-    window.location.href = "./searchlanding.html";
- });
+    window.location.href = "./searchlanding.html"
+ })
 
+//  why can't i get this to work without document?
+ $(document).on('click','.lastSearch',function(){
+    var preCityName = $(this).attr("value")
+    var cityName = titleCase(preCityName)
+    localStorage.setItem("currentcitysearch",JSON.stringify(cityName))
+    window.location.href = "./searchlanding.html"
+ })
+
+//  I dont understand this
+ function titleCase(str) {
+    return str.replace(/(?:^|\s)\w/g, function(match) {
+        return match.toUpperCase();
+    });
+}
