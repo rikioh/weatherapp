@@ -361,7 +361,7 @@ function createCurrentWeatherItems(){
         $("#temp1").append(tempShow)
         $("#tempShow").text("Current Temp: "+currentWeather[0]+"°")
         $("#humid1").append(humidShow)
-        $("#humidShow").text("Humidity: "+currentWeather[1]+"%")
+        $("#humidShow").text("Humidity: "+currentWeather[1])
         $("#wind1").append(windShow)
         $("#windShow").text("Wind: "+currentWeather[2])
         $("#uv1").append(uvShow)
