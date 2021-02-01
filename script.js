@@ -334,7 +334,7 @@ function createCurrentWeatherItems(){
         var windShow = $("<h2>")
         var uvShow = $("<h2>")
         // add classes and attributes to col's/row
-        firstRow.addClass("row dash-row")
+        firstRow.addClass("row")
         firstRow.attr("id", "firstRows")
         temp1.addClass("col-md-3")
         temp1.attr("id", "temp1")
@@ -353,7 +353,7 @@ function createCurrentWeatherItems(){
         uvShow.addClass("drop")
         uvShow.attr("id", "uvShow")
         // append row to html card and columns to firstRow
-        $("#notTodayWeather").prepend(firstRow)
+        $("#city-Name").append(firstRow)
         $("#firstRows").append(temp1)
         $("#firstRows").append(humid1)
         $("#firstRows").append(wind1)
