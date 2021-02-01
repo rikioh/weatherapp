@@ -26,6 +26,13 @@ else if(cityHistory.includes(cityName)!=true){
 // updates city name on page
 $("#city-Name").text(cityName)
 
+// adds date nect to city name
+// pull full date of current day as a string
+var today = dayjs().$d.toString()
+// slice the first 3 characters off the full date string to get weekday
+var todaySlice = today.slice(0,10)
+$("#date-Name").text(todaySlice)
+
 // run 5 day forecast function
 getWeatherData(cityName)
 

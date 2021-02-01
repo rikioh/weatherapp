@@ -353,7 +353,7 @@ function createCurrentWeatherItems(){
         uvShow.addClass("drop")
         uvShow.attr("id", "uvShow")
         // append row to html card and columns to firstRow
-        $("#city-Name").append(firstRow)
+        $("#todayWeather").append(firstRow)
         $("#firstRows").append(temp1)
         $("#firstRows").append(humid1)
         $("#firstRows").append(wind1)
