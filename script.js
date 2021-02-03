@@ -1,3 +1,5 @@
+// $( document ).ready(function() {
+    
 var formInput = document.getElementById("citySearchBar")
 
 // holds api key for web addresses
@@ -158,9 +160,11 @@ function getCurrentWeatherData(cityName){
         // grab lat and lon
         lat = data.coord.lat
         lon = data.coord.lon
+        console.log(lat)
+        console.log(lon)
         // grab UV data by running the one call API (passed lat,lon into function to plug into getRequestURLUV function return url)
-        getCurrentUVData(lat, lon)
-
+        getCurrentUVData()
+        console.log("returned from getcurrentuvdata: ",currentWeather);
         createCurrentWeatherItems()
     }
     )
@@ -171,15 +175,17 @@ function getRequestURLUV(){
     return `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=hourly,daily&appid=${apiKey}`
 }
 
-function getCurrentUVData(cityName){
+function getCurrentUVData(){
     $.ajax({
-        url: getRequestURLUV(cityName),
+        url: getRequestURLUV(),
         method: "GET"
         // data below is the object that holds the current forecast object - (data is the response[needed]) - then is like an if statement
     }).then(function(data){
         var currentUVI = Math.round(data.current.uvi)
-        currentWeather.push(currentUVI)
-
+        var UVIstring = currentUVI.toString()
+        currentWeather.push(UVIstring)
+        console.log("in get currentUVData: ", UVIstring);
+        $("#uvShow").text("UV Index: "+currentWeather[3]+"/10")
     }
     )
 }
@@ -365,7 +371,7 @@ function createCurrentWeatherItems(){
         $("#wind1").append(windShow)
         $("#windShow").text("Wind: "+currentWeather[2])
         $("#uv1").append(uvShow)
-        $("#uvShow").text("UV Index: "+currentWeather[3]+"/10")
+
         console.log(currentWeather)
 
 }
@@ -413,3 +419,4 @@ $(document).on('submit',function(event){
         return match.toUpperCase();
     });
 }
+// });
