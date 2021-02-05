@@ -11,6 +11,8 @@ var weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 // stores current tempterature
 var currentWeather = []
 
+var currentWeatherIcon = []
+
 var lat = ""
 var lon = ""
 
@@ -160,12 +162,14 @@ function getCurrentWeatherData(cityName){
         // grab lat and lon
         lat = data.coord.lat
         lon = data.coord.lon
-        console.log(lat)
-        console.log(lon)
+        
+        var currentIconID = data.weather[0].icon
+        var currentIcon = `http://openweathermap.org/img/wn/${currentIconID}@2x.png`
+        currentWeatherIcon.push(currentIcon)
         // grab UV data by running the one call API (passed lat,lon into function to plug into getRequestURLUV function return url)
         getCurrentUVData()
-        console.log("returned from getcurrentuvdata: ",currentWeather);
         createCurrentWeatherItems()
+
     }
     )
 }
@@ -371,6 +375,8 @@ function createCurrentWeatherItems(){
         $("#wind1").append(windShow)
         $("#windShow").text("Wind: "+currentWeather[2])
         $("#uv1").append(uvShow)
+        $("#city-Name").append(`<img id="iconImg" src=${currentWeatherIcon[0]} />`)
+        console.log(currentWeatherIcon[0]);
 
         console.log(currentWeather)
 
@@ -391,14 +397,13 @@ function previousSearches(){
     }
 }
 
-// search action for when a user presses enter on the city search form
+// search action for when a user presses enter on the city search form (look for keyup keydown enterkey=13)
 $(document).on('submit',function(event){
     event.preventDefault();
     // pulls value from city search form
     var preCityName = $("#citySearchBar").val()
     var cityName = titleCase(preCityName)
     console.log(cityName)
-    // getWeatherData(cityName)
     // adds search item to local storage for future quick search on sidebar
     localStorage.setItem("currentcitysearch",JSON.stringify(cityName))
     // change this to actual URL later???
