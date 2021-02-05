@@ -1,4 +1,4 @@
-# calendar
+# Weather App
 
 **Name**: Rikio's 5 day weather app
 
